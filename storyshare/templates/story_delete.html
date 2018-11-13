@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="." method="POST">
+	{% csrf_token %}
+	<h1>Do you really want to delete story?</h1>
+	<p><input type="submit" value="Yes"></p>
+	<p><a href="../"><button>Cancel</button></a></p>
+</form>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block head %}
+<!-- <link href="{% static 'css/signin.css' %}" rel="stylesheet"> -->
+<link href="{% static 'css/navbar.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-dark" id="navbar_id">
+      <a class="navbar-brand" href="/">StoryShare</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExample01">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/accounts/logout/">Logout<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/all/">All stories<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/profile/">Profile<span class="sr-only">(current)</span></a>
+          </li>
+          {% if user.is_superuser %}
+          <li class="nav-item active">
+          	<a class="nav-link" href="/admin/">Admin<span class="sr-only">(current)</span></a>
+          </li>
+          {% endif %}
+        </ul>
+<!--         <form class="form-inline my-2 my-md-0">
+          <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+        </form> -->
+      </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<form action="" method="POST">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<div class="row">
+	<div class="col-md-4"></div>
+	<div class="col-md-4">
+	<input type="submit" name="save" value="Save" class="btn btn-lg btn-primary btn-block"/>
+	</div>
+	<div class="col-md-4"></div>
+	</div>
+	<p></p>
+	{% if form.instance.draft %}
+	<div class="row">
+	<div class="col-md-4"></div>
+	<div class="col-md-4">
+		<input type="submit" name="publish" value="Publish" class="btn btn-lg btn-primary btn-block"/>
+	</div>
+	<div class="col-md-4"></div>
+	{% endif %}
+</form>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#navbar_id").css("background-color", "#407690");
+        $("#id_content").addClass("form-control");
+        $("#id_topic").addClass("form-control");
+        $(".btn").css("background-color", "#407690");
+        $(".btn").css("border-color", "#407690");
+    })
+</script>
+{% endblock %}

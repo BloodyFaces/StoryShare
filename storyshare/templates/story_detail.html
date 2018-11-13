@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}Story{% endblock %}
+
+{% block head %}
+<!-- <link href="{% static 'css/signin.css' %}" rel="stylesheet"> -->
+<link href="{% static 'css/navbar.css' %}" rel="stylesheet">
+ <!-- <link href="{% static 'css/offcanvas.css' %}" rel="stylesheet"> -->
+{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-dark" id="navbar_id">
+      <a class="navbar-brand" href="/">StoryShare</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExample01">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/accounts/logout/">Logout<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/all/">All stories<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/profile/">Profile<span class="sr-only">(current)</span></a>
+          </li>
+          {% if user.is_superuser %}
+          <li class="nav-item active">
+          	<a class="nav-link" href="/admin/">Admin<span class="sr-only">(current)</span></a>
+          </li>
+          {% endif %}
+        </ul>
+<!--         <form class="form-inline my-2 my-md-0">
+          <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+        </form> -->
+      </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	<section class="jumbotron text-center">
+          	<h1 class="jumbotron-heading">{{ object.topic }}</h1>
+          	<h3 class="text-muted">{{ object.content }}</h3>
+          	<p>
+          	<button onclick="myFunction()" class="btn btn-primary my-2">Comment</button>
+          	{% if object.liked %}
+          	<button class="btn btn-warning my-2" id="like_id">Like</button>
+            <button class="btn btn-dark my-2" id="dislike_id">Dislike</button>
+          	{% elif object.disliked %}
+          	<button class="btn btn-dark my-2" id="like_id">Like</button>
+            <button class="btn btn-warning my-2" id="dislike_id">Dislike</button>
+            {% else %}
+            <button onclick="add_like({{ object.id }})" class="btn btn-success my-2" id="like_id">Like</button>
+            <button onclick="add_dislike({{ object.id }})" class="btn btn-danger my-2" id="dislike_id">Dislike</button>
+            {% endif %}
+          	</p>
+          	<p>
+            <a href="/all/"><button class="btn btn btn-primary my-2" id="back_id">Back</button></a>
+          	</p>
+    </section>
+</div>
+<div class="container">
+	<h3 class="h4 mb-3 font-weight-normal text-center">Leave your comment here</h3>
+	<form method="post" action="">
+		{% csrf_token %}
+    	{{ form.as_p }}
+    	<div class="row">
+    		<div class="col-md-8"></div>
+    		<div class="col-md-4">
+    			<input type="submit" id="comment_story_id" class="btn btn-lg btn-primary btn-block" value="Comment"/>
+    		</div>
+    	</div>
+	</form>
+</div>
+
+<div class="container">
+<h3 class="h4 mb-3 font-weight-normal text-center">All comments</h3>
+{% for comment in comments %}
+<div class="my-3 p-3 bg-light rounded shadow-sm">
+	<div class="row">
+	<div class="col-md-12">
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">
+            	<div class="row">
+            		<div class="col-md-1">
+            			<img class="rounded-circle" src="{{ comment.image }}" width="60" height="60" />
+            		</div>
+            		<div class="col-md-11">
+            		<p class="h5">Commented by user: {{ comment.author }}</p>
+            		{% if comment.firstname and comment.lastname %}
+            		<p class="h5">{{ comment.firstname }} {{ comment.lastname }}</p>
+            		{% endif %}
+            		<p class="h5">{{ comment.published|timesince }} ago</p>
+            		</div>
+            	</div>
+            </h1>
+            <p></p>
+            <h5 class="text-muted">{{ comment.content }}</h5>
+            <p></p>
+          </div>
+    </div>
+</div>
+</div>
+{% endfor %}
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#navbar_id").css("background-color", "#407690");
+        $(".btn-primary").css("background-color", "#407690");
+        $(".btn-primary").css("border-color", "#407690");
+        $("#comment_story_id").css("border-color", "#407690");
+        $("#comment_story_id").css("background-color", "#407690");
+        $("#id_name").addClass("form-control");
+        $("#id_content").addClass("form-control");
+        $("#id_surname").addClass("form-control");
+    });
+
+    function add_like(storyId){
+    	$.ajax({
+        url: '/add_like/',
+        data: {
+          'story_id': storyId
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.success) {
+          	$("#like_id").css("background-color", "#ffc107");
+        	$("#like_id").css("border-color", "#ffc107");
+        	$("#dislike_id").css("background-color", "#343a40");
+        	$("#dislike_id").css("border-color", "#343a40");
+        	$('#dislike_id').prop("onclick", null).off("click");
+        	$('#like_id').prop("onclick", null).off("click");
+          }
+        }
+      });
+    }
+
+    function add_dislike(storyId){
+    	$.ajax({
+        url: '/add_dislike/',
+        data: {
+          'story_id': storyId
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.success) {
+          	$("#dislike_id").css("background-color", "#ffc107");
+        	$("#dislike_id").css("border-color", "#ffc107");
+        	$("#like_id").css("background-color", "#343a40");
+        	$("#like_id").css("border-color", "#343a40");
+			$('#dislike_id').prop("onclick", null).off("click");
+        	$('#like_id').prop("onclick", null).off("click");
+          }
+        }
+      });
+    }
+</script>
+{% endblock %}

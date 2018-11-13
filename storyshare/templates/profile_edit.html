@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Profile Edit{% endblock %}
+
+{% block head %}
+<!-- <link href="{% static 'css/signin.css' %}" rel="stylesheet"> -->
+<link href="{% static 'css/navbar.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-dark" id="navbar_id">
+      <a class="navbar-brand" href="/">StoryShare</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExample01">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/accounts/logout/">Logout<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/all/">All stories<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/profile/">Profile<span class="sr-only">(current)</span></a>
+          </li>
+          {% if user.is_superuser %}
+          <li class="nav-item active">
+          	<a class="nav-link" href="/admin/">Admin<span class="sr-only">(current)</span></a>
+          </li>
+          {% endif %}
+        </ul>
+<!--         <form class="form-inline my-2 my-md-0">
+          <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+        </form> -->
+      </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+<div class="col-md-5"></div>
+<div class="col-sm-2">
+<form method="post" action="" enctype="multipart/form-data">
+	<h1 class="h3 mb-3 font-weight-normal text-center">Hello, {{ user.username }}. Here you can change your profile info!</h1>
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% if form.instance.image %}
+    <div class="container text-center">
+    	<img class="rounded-circle" src="{{ form.instance.image.url }}" width="140" height="140" />
+    </div>
+    <p></p>
+    {% endif %}
+    <input type="submit" value="Submit" id="submit_id" class="btn btn-lg btn-primary btn-block"/>
+</form>
+<p></p>
+	<a href="/profile/"><button type="button" class="btn btn-lg btn-block btn-primary">Back</button></a>
+</div>
+<div class="col-md-5"></div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#navbar_id").css("background-color", "#407690");
+        $(".btn").css("background-color", "#407690");
+        $(".btn").css("border-color", "#407690");
+        $("#id_name").addClass("form-control");
+        $("#id_surname").addClass("form-control");
+    })
+</script>
+{% endblock %}

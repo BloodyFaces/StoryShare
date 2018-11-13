@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block head %}
+<!-- <link href="{% static 'css/signin.css' %}" rel="stylesheet"> -->
+<link href="{% static 'css/navbar.css' %}" rel="stylesheet">
+<link href="{% static 'css/album.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-dark" id="navbar_id">
+      <a class="navbar-brand" href="/">StoryShare</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExample01">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/profile/">Profile<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/accounts/logout/">Logout<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/all/">All stories<span class="sr-only">(current)</span></a>
+          </li>
+        </ul>
+<!--         <form class="form-inline my-2 my-md-0">
+          <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+        </form> -->
+      </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+        <div class="container border">
+          <h1 class="jumbotron-heading">Profile Information</h1>
+          <p></p>
+              <div class="row">
+                <div class="col-md-2">
+                  <img class="rounded-circle" src="{{ profile.imageUrl }}" width="120" height="120" />
+                </div>
+                <div class="col-md-5">
+                <h5>Username: {{ user.username }}</h5>
+                <h5>Name: {{ user.first_name }}</h5>
+                <h5>Surname: {{ user.last_name }}</h5>
+                <h5>Email: {{ user.email }}</h5>
+                </div>
+                <div class="col-md-5">
+                <h5>Stories: {{ profile.storyCount }}</h5>
+                <h5>Rating: {{ profile.rating }}</h5>
+                <h5>Likes: {{ profile.likes }}</h5>
+                <h5>Dislikes: {{ profile.dislikes }}</h5>
+                </div>
+              </div>
+              <p></p>
+            <a href="/profile/edit/" class="btn btn-lg btn-primary">Edit Profile Info</a>
+            <a href="/create/" class="btn btn-lg btn-primary">Publish new story</a>
+          <p></p>
+        </div>
+<div class="album py-5 bg-light">
+<h1 class="h3 mb-3 font-weight-normal text-center">Your stories:</h1>
+{% for instance in user_stories %}
+<p></p>
+<div class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
+  <div class="card mb-4 shadow-sm">
+        <div class="card-header">
+            <h4 class="my-0 font-weight-normal">{{ instance.topic }}</h4>
+            {% if instance.draft %}<h5 class="my-0 font-weight-normal" style="color: red">In draft</h4>{% endif %}
+        </div>
+        <div class="card-body">
+            <h1 class="card-title pricing-card-title">
+                <div>
+                <p><h5>Created: {{ instance.created }}</h5></p>
+                </div>
+            </h1>
+            <h3 class="text-muted">{{ instance.content|truncatechars:200 }}</h3>
+            <p></p>
+            {% if instance.draft %}
+            <a href="/{{ instance.id }}/update/"><button type="button" class="btn btn-lg btn-primary">Edit</button></a>
+            {% else %}
+            <a href="/{{ instance.id }}/"><button type="button" class="btn btn-lg btn-primary">View full</button></a>
+            {% endif %}
+        </div>
+  </div>
+ </div>
+  <div class="col-md-2"></div>
+</div>
+
+{% endfor %}
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#navbar_id").css("background-color", "#407690");
+        $(".btn").css("background-color", "#407690");
+        $(".btn").css("border-color", "#407690");
+    })
+</script>
+{% endblock %}
