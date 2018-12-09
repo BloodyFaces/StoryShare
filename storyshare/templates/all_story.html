@@ -44,7 +44,7 @@
 
 {% block content %}
 <div class="container text-center">
-<h1 class="display-4 text-muted">Hello, {{ user.username }}!
+<h1 class="display-6 text-muted">Hello, {{ user.username }}!
 <h1 class="display-6 text-muted">To publish your own story, please, select option in navbar</h1>
 </div>
 {% for instance in object_list %}
@@ -67,7 +67,7 @@
             		{% if instance.firstname and instance.lastname %}
             		<p><h5>{{ instance.firstname }} {{ instance.lastname }}</h5></p>
             		{% endif %}
-            		<p><h5>{{ instance.created|timesince }} ago</h5></p>
+            		<p><h5>{{ instance.published|timesince }} ago</h5></p>
             		</div>
             	</div>
             </h1>
@@ -75,8 +75,8 @@
             <h3 class="text-muted">{{ instance.content|truncatechars:200 }}</h3>
             <p></p>
             <a href="/{{ instance.id }}"><button type="button" class="btn btn-lg btn-primary">View full</button></a>
-            <button type="button" class="btn-success">{{ instance.likes }} Likes</button>
-            <button type="button" class="btn-danger">{{ instance.dislikes }} Dislikes</button>
+            <button type="button" class="btn btn-success">{{ instance.likes }} Likes</button>
+            <button type="button" class="btn btn-danger">{{ instance.dislikes }} Dislikes</button>
           </div>
     </div>
     </div>
@@ -90,8 +90,8 @@
     $(document).ready(function() {
         $("#navbar_id").css("background-color", "#407690");
         $(".card mb-4 shadow-sm col-md-3").css("margin-top", "5%");
-        $(".btn").css("background-color", "#407690");
-        $(".btn").css("border-color", "#407690");
+        $(".btn-primary").css("background-color", "#407690");
+        $(".btn-primary").css("border-color", "#407690");
     })
 </script>
 {% endblock %}

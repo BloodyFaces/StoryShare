@@ -48,7 +48,7 @@
 
 {% block content %}
 <div class="container text-center">
-<h1 class="display-4 text-muted">{% if user.is_authenticated %}Hello, {{ user.username }}! {% endif %}There are top 5 stories according to StoryShare users</h1>
+<h1 class="display-6 text-muted">{% if user.is_authenticated %}Hello, {{ user.username }}! {% endif %}There are the hottest 5 stories according to StoryShare users</h1>
 <h1 class="display-6 text-muted">{% if user.is_authenticated %}{% else %}To read more stories or publish your own, please, <a href="/accounts/login/">Login</a> and select option in navbar{% endif %}</h1>
 </div>
 {% for instance in object_list %}
@@ -79,8 +79,8 @@
             <h3 class="text-muted">{{ instance.content|truncatechars:200 }}</h3>
             <p></p>
             <a href="/{{ instance.id }}/"><button type="button" class="btn btn-lg btn-primary">View full</button></a>
-            <button type="button" class="btn-success">{{ instance.likes }} Likes</button>
-            <button type="button" class="btn-danger">{{ instance.dislikes }} Dislikes</button>
+            <button type="button" class="btn btn-success">{{ instance.likes }} Likes</button>
+            <button type="button" class="btn btn-danger">{{ instance.dislikes }} Dislikes</button>
           </div>
     </div>
     </div>
@@ -94,8 +94,8 @@
     $(document).ready(function() {
         $("#navbar_id").css("background-color", "#407690");
         $(".card mb-4 shadow-sm col-md-3").css("margin-top", "5%");
-        $(".btn").css("background-color", "#407690");
-        $(".btn").css("border-color", "#407690");
+        $(".btn-primary").css("background-color", "#407690");
+        $(".btn-primary").css("border-color", "#407690");
     })
 </script>
 {% endblock %}

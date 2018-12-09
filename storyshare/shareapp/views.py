@@ -40,7 +40,7 @@ class AllStoriesListView(ListView):
 	template_name = "all_story.html"
 
 	def get_queryset(self):
-		stories = Story.objects.filter(draft=False).order_by("published")
+		stories = Story.objects.filter(draft=False).order_by("-published")
 		for story in stories:
 			story.image = story.user.profileinfo_set.all()[0].getImage().url
 			story.author = story.user.username
